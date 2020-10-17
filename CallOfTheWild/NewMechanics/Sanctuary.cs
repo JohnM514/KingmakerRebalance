@@ -145,7 +145,6 @@ namespace CallOfTheWild.SanctuaryMechanics
     {
         static void Postfix(EntityDataBase sourceEntity, UnitEntityData targetUnit, RulebookEvent evt, ref bool __result)
         {
-            Main.TraceLog();
             if (__result)
             {
                 return;

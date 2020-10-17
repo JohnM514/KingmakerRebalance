@@ -51,7 +51,6 @@ namespace CallOfTheWild
     {
         static int getClassLevelRank(UnitDescriptor unit, ContextRankConfig rank_config)
         {
-            Main.TraceLog();
             if (unit == null)
             {
                 return 0;

@@ -29,7 +29,6 @@ namespace CallOfTheWild
     {
         static bool Prefix(AbilityData __instance, ref AbilityTargetAnchor __result)
         {
-            Main.TraceLog();
             if ((UnityEngine.Object)__instance.SourceItemUsableBlueprint != (UnityEngine.Object)null && __instance.SourceItemUsableBlueprint.Type == UsableItemType.Potion && !__instance.PotionForOther || __instance.IsAlchemistSpell && !__instance.AlchemistInfusion)
                 __result = AbilityTargetAnchor.Owner;
             else if (__instance.Blueprint.Range == AbilityRange.Personal)
@@ -49,7 +48,6 @@ namespace CallOfTheWild
     {
         static bool Prefix(AbilityData __instance, TargetWrapper target, ref bool __result)
         {
-            Main.TraceLog();
             foreach (IAbilityTargetChecker targetChecker in __instance.Blueprint.TargetCheckers)
             {
                 if (!targetChecker.CanTarget(__instance.Caster.Unit, target))

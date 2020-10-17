@@ -14,7 +14,6 @@ using Kingmaker.UnitLogic.Buffs;
 using Kingmaker.UnitLogic.Commands;
 using Kingmaker.UnitLogic.Commands.Base;
 using Kingmaker.View;
-using Kingmaker.View.Equipment;
 using Kingmaker.Visual.Animation;
 using Kingmaker.Visual.CharacterSystem;
 using Newtonsoft.Json;
@@ -36,19 +35,9 @@ namespace CallOfTheWild.UnitViewMechanics
     {
         static bool Prefix(Character originalAvatar, string dollName, DollRoom __instance, ref Character __result, Transform ___m_CharacterPlaceholder)
         {
-            Main.TraceLog();
             try
             {
-                Character character = null;
-                if (originalAvatar.BakedCharacter)
-                {
-                    var clone = Helpers.Clone(originalAvatar.gameObject, string.Format("Doll [{0}]", dollName));
-                    //UnityEngine.Object.Instantiate(originalAvatar.gameObject, Vector3.zero, Quaternion.identity);                                                                                    
-                    character = clone.AddComponent<Character>();//clone.GetComponent<Character>();
-                } else
-                {
-                    character = new GameObject(string.Format("Doll [{0}]", dollName)).AddComponent<Character>();
-                }
+                Character character = new GameObject(string.Format("Doll [{0}]", dollName)).AddComponent<Character>();
                 character.transform.localScale = originalAvatar.transform.localScale;
                 character.IsInDollRoom = true;
                 character.AnimatorPrefab = originalAvatar.AnimatorPrefab;
@@ -94,7 +83,6 @@ namespace CallOfTheWild.UnitViewMechanics
     {
         static void Postfix(EntityDataBase __instance, EntityViewBase view)
         {
-            Main.TraceLog();
             if (view != null)
             {
                 return;
@@ -231,13 +219,11 @@ namespace CallOfTheWild.UnitViewMechanics
             newView.transform.rotation = oldView.transform.rotation;
             newView.DisableSizeScaling = false;
             newView.Blueprint = Owner.Blueprint;
-
             if (!use_master_view)
             {
                 var character = newView.GetComponent<Character>();
                 if (character == null)
                 {
-                    Main.DebugLog($"Unit {Owner.CharacterName} has new character, creating new character");
                     character = newView.gameObject.AddComponent<Character>();
                     character.AnimatorPrefab = BlueprintRoot.Instance.CharGen.FemaleDoll.AnimatorPrefab;
                     character.BakedCharacter = CreateBakedCharacter(newView.gameObject);
@@ -245,9 +231,6 @@ namespace CallOfTheWild.UnitViewMechanics
                     /*var drow = ResourcesLibrary.TryGetResource<UnitEntityView>("a65d9da806faa8f4ca078dfe942bf458", true);
                     CloneMonobehaviour(drow.GetComponentInChildren<Character>(), character);
                     character.BakedCharacter = CreateBakedCharacter(newView.gameObject);*/
-                } else
-                {
-                    Main.DebugLog($"Unit {Owner.CharacterName} has character");
                 }
             }
             Owner.Unit.AttachToViewOnLoad(newView);
@@ -308,16 +291,15 @@ namespace CallOfTheWild.UnitViewMechanics
             {
                 var desc = new RendererDescription();
                 desc.Mesh = renderer.sharedMesh;
-                desc.Mesh.UploadMeshData(true);
                 var bonesNames = renderer.bones.Select(t => t.name).ToArray();
-                /*desc.Textures = new List<CharacterTextureDescription>()
+                desc.Textures = new List<CharacterTextureDescription>()
                     {
                         new CharacterTextureDescription(CharacterTextureChannel.Diffuse, renderer.material.mainTexture as Texture2D)
                     };
                 desc.Material = renderer.sharedMaterial;
                 desc.RootBone = "Pelvis";
                 desc.Bones = bonesNames;
-                desc.Name = renderer.name;*/
+                desc.Name = renderer.name;
                 descriptions.Add(desc);
             }
             var bakedCharacter = ScriptableObject.CreateInstance<BakedCharacter>();
@@ -334,40 +316,6 @@ namespace CallOfTheWild.UnitViewMechanics
             {
                 field.SetValue(target, field.GetValue(source));
             }
-        }
-
-
-        static public GameObject Clone(GameObject obj, string name)
-        {
-            var hands = obj.GetComponent<UnitEntityView>()?.HandsEquipment;
-            //Destroy weapon models so that they are not cloned
-            foreach (var kv in hands.Sets)
-            {
-                if (kv.Value.MainHand.VisualModel != null)
-                {
-                    UnityEngine.Object.DestroyImmediate(kv.Value.MainHand.VisualModel);
-                    AccessTools.Property(typeof(UnitViewHandSlotData), "VisualModel")
-                        .SetValue(kv.Value.MainHand, null);
-                }
-                if (kv.Value.OffHand.VisualModel != null)
-                {
-                    UnityEngine.Object.DestroyImmediate(kv.Value.OffHand.VisualModel);
-                    AccessTools.Property(typeof(UnitViewHandSlotData), "VisualModel")
-                        .SetValue(kv.Value.OffHand, null);
-                }
-            }
-
-            //Only clone children so that UnitEntityView is not cloned
-            var gameObject = new GameObject(name);
-            for (int i = 0; i < obj.transform.childCount; i++)
-            {
-                var child = obj.transform.GetChild(i);
-                var clone = UnityEngine.Object.Instantiate(child);
-                clone.parent = gameObject.transform;
-            }
-            //Restore weapons to original model (probabably uncessary as the game seems to do this when exiting from inventory)
-            hands.UpdateAll();
-            return gameObject;
         }
     }
 }

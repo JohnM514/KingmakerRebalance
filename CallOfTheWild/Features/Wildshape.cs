@@ -1779,7 +1779,6 @@ namespace CallOfTheWild
         {
             static public void Postfix(Kingmaker.Items.UnitBody __instance)
             {
-                Main.TraceLog();
                 foreach (ItemSlot itemSlot in __instance.AllSlots)
                 {
                     itemSlot.Lock.Release();
@@ -1794,7 +1793,6 @@ namespace CallOfTheWild
         {
             static public void Prefix(Kingmaker.Items.UnitBody __instance)
             {
-                Main.TraceLog();
                 foreach (ItemSlot itemSlot in __instance.AllSlots)
                 {
                     itemSlot.Lock.Retain();

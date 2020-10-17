@@ -35,7 +35,6 @@ namespace CallOfTheWild.NewMechanics.ParametrizedFeatureSelection
     {
         static bool Prefix(BlueprintParametrizedFeature __instance, UnitDescriptor beforeLevelUpUnit, UnitDescriptor previewUnit, ref IEnumerable<IFeatureSelectionItem> __result)
         {
-            Main.TraceLog();
             switch (__instance.ParameterType)
             {
                 case (FeatureParameterType)FeatureParameterTypeExtender.KnownSpell:
@@ -147,7 +146,6 @@ namespace CallOfTheWild.NewMechanics.ParametrizedFeatureSelection
     {
         static bool Prefix(BlueprintParametrizedFeature __instance, ref FeatureUIData[] ___m_CachedItems, ref IEnumerable<FeatureUIData> __result)
         {
-            Main.TraceLog();
             if (___m_CachedItems != null)
             {
                 return true;
@@ -186,7 +184,6 @@ namespace CallOfTheWild.NewMechanics.ParametrizedFeatureSelection
 
         static private FeatureParameterType getParameterType(BlueprintParametrizedFeature feature)
         {
-            Main.TraceLog();
             switch (feature.ParameterType)
             {
                 case (FeatureParameterType)NewMechanics.ParametrizedFeatureSelection.FeatureParameterTypeExtender.KnownSpell:

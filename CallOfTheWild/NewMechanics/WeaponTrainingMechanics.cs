@@ -550,7 +550,6 @@ namespace CallOfTheWild.WeaponTrainingMechanics
 
         static public void Postfix(UnitPartWeaponTraining __instance, ItemEntityWeapon weapon, ref int __result)
         {
-            Main.TraceLog();
             if (weapon == null)
             {
                 return;

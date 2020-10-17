@@ -1757,7 +1757,6 @@ namespace CallOfTheWild
                                          Helpers.CreateAddStatBonus(StatType.SaveReflex, -4, ModifierDescriptor.UntypedStackable),
                                          Helpers.Create<BuffAllSkillsBonus>(b => { b.Value = -4; b.Descriptor = ModifierDescriptor.UntypedStackable; }),
                                          Common.createAddCondition(Kingmaker.UnitLogic.UnitCondition.SpellCastingIsDifficult),
-                                         Common.createAddCondition(Kingmaker.UnitLogic.UnitCondition.Slowed),
                                          Helpers.Create<ConcealementMechanics.AddOutgoingConcealment>(a =>
                                          {
                                              a.Concealment = Concealment.Partial;
@@ -9170,7 +9169,6 @@ namespace CallOfTheWild
         {
             static bool Prefix(SpellLevelList __instance)
             {
-                Main.TraceLog();
                 var tr = Harmony12.Traverse.Create(__instance);
                 tr.Field("m_SpellsFiltered").SetValue(null).GetValue();
                 return true;

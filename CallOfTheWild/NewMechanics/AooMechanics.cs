@@ -193,7 +193,6 @@ namespace CallOfTheWild.AooMechanics
     {
         static bool Prefix(UnitEntityData unit, UnitEntityData enemy, ref bool __result)
         {
-            Main.TraceLog();
             __result = false;
             if (!unit.Descriptor.State.CanAct)
             {               
@@ -234,7 +233,6 @@ namespace CallOfTheWild.AooMechanics
 
         static public WeaponSlot canMakeAoo(UnitEntityData unit, UnitEntityData enemy)
         {
-            Main.TraceLog();
             if (unit == null || enemy == null)
             {
                 return null;
@@ -274,7 +272,6 @@ namespace CallOfTheWild.AooMechanics
 
         static public WeaponSlot getThreatHand2(UnitEntityData unit)
         {
-            Main.TraceLog();
             if (unit == null)
             {
                 return null;

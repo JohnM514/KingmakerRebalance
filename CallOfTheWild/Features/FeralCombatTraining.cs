@@ -520,7 +520,6 @@ namespace CallOfTheWild
         {
             static void Postfix(DeflectArrows __instance, ref bool __result)
             {
-                Main.TraceLog();
                 if (__result)
                 {
                     return;

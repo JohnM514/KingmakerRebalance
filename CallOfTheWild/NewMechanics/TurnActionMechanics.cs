@@ -76,7 +76,6 @@ namespace CallOfTheWild.TurnActionMechanics
     {
         static void Postfix(BlueprintItemEquipmentUsable __instance, UnitDescriptor unit,  ref bool __result)
         {
-            Main.TraceLog();
             if (__result == true)
             {
                 return;
@@ -577,7 +576,6 @@ namespace CallOfTheWild.TurnActionMechanics
     {
         static void Postfix(AbilityData __instance, ref CommandType __result)
         {
-            Main.TraceLog();
             if (__instance.Caster == null)
             {
                 return;
@@ -686,7 +684,6 @@ namespace CallOfTheWild.TurnActionMechanics
     {
         static void Postfix(AbilityData __instance, ref bool __result)
         {
-            Main.TraceLog();
             if (__result == true)
             {
                 var standard_action_use = __instance.Caster.Get<UnitPartStandardActionAbilityUse>();

@@ -120,7 +120,6 @@ namespace CallOfTheWild.UndeadMechanics
     {
         static void Postfix(UnitDescriptor __instance, ref bool __result)
         {
-            Main.TraceLog();
             try
             {
                 if (!__result) __result = __instance.Ensure<UnitPartConsiderUndeadForHealing>().active();

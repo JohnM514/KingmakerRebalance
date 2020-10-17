@@ -58,8 +58,6 @@ using Kingmaker.Items;
 using Kingmaker.UnitLogic.Buffs;
 using Kingmaker.UnitLogic.Alignments;
 using CallOfTheWild.NewMechanics;
-using Kingmaker.UI._ConsoleUI.Context.InGame;
-using Kingmaker.UI._ConsoleUI.CombatLog;
 
 namespace CallOfTheWild
 {
@@ -1956,33 +1954,13 @@ namespace CallOfTheWild
         }
 
 
-        public static void AddBattleLogMessage(string message, string tooltip = null, Color? color = null)
+        public static void AddBattleLogMessage(string message, object tooltip = null, Color? color = null)
         {
+            var data = new LogDataManager.LogItemData(message, color ?? GameLogStrings.Instance.DefaultColor, tooltip, PrefixIcon.None);
             if (Game.Instance.UI.BattleLogManager)
             {
-                Game.Instance.UI.BattleLogManager.LogView.AddLogEntry(message, color ?? GameLogStrings.Instance.DefaultColor, tooltip, PrefixIcon.None);
+                Game.Instance.UI.BattleLogManager.LogView.AddLogEntry(data);
             }
-            else
-            {
-                getCombatLogVm()?.LogListModel?.AddLogEntry(message, color ?? GameLogStrings.Instance.DefaultColor, tooltip, PrefixIcon.None);
-            }
-        }
-
-
-        public static CombatLogVM getCombatLogVm()
-        {
-            var in_game_ui_context = Game.Instance?.RootUiContext?.InGameUiContext;
-            if (in_game_ui_context == null)
-            {
-                return null;
-            }
-            var static_context = Helpers.GetField<InGameUiStaticPartContext>(Game.Instance?.RootUiContext?.InGameUiContext, "m_StaticPartContext");
-            if (static_context == null)
-            {
-                return null;
-            }
-            var combat_log_vm = Helpers.GetField<CombatLogVM>(static_context, "m_CombatLogVm");
-            return combat_log_vm;
         }
 
 

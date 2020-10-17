@@ -332,7 +332,6 @@ namespace CallOfTheWild
     {
         static bool Prefix(SpellSpecializationParametrized __instance, RuleCalculateAbilityParams evt)
         {
-            Main.TraceLog();
             var spell = (__instance.Fact as Feature)?.Param.Blueprint as BlueprintAbility;
             if (SpellDuplicates.isDuplicate(spell, evt.Spell) || SpellDuplicates.isDuplicate(spell, evt.Spell?.Parent))
             {

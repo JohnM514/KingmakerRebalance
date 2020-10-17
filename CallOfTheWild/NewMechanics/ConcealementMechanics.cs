@@ -245,7 +245,6 @@ namespace CallOfTheWild.ConcealementMechanics
     {
         public static bool Prefix(UnitEntityData initiator, UnitEntityData target, bool attack, ref Concealment __result)
         {
-            Main.TraceLog();
             UnitPartConcealment unitPartConcealment1 = initiator.Get<UnitPartConcealment>();
             UnitPartConcealment unitPartConcealment2 = target.Get<UnitPartConcealment>();
 
@@ -450,7 +449,6 @@ namespace CallOfTheWild.ConcealementMechanics
     {
         static void Postfix(AbilityData __instance, ref float __result)
         {
-            Main.TraceLog();
             AbilityData_GetApproachDistance_Patch.Postfix(__instance, null, ref __result);
         }
     }
@@ -460,7 +458,6 @@ namespace CallOfTheWild.ConcealementMechanics
     {
         internal static void Postfix(AbilityData __instance, UnitEntityData target, ref float __result)
         {
-            Main.TraceLog();
             try
             {
                 var caster = __instance.Caster;

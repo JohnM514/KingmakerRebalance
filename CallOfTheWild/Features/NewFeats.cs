@@ -614,7 +614,6 @@ namespace CallOfTheWild
             static BlueprintFeature shield_master = library.Get<BlueprintFeature>("dbec636d84482944f87435bd31522fcc");
             static bool Prefix(TwoWeaponFightingAttackPenalty __instance, RuleCalculateAttackBonusWithoutTarget evt)
             {
-                Main.TraceLog();
                 RulebookEvent rule = evt.Reason.Rule;
                 if (rule != null && rule is RuleAttackWithWeapon attack && !attack.IsFullAttack)
                 {
@@ -657,7 +656,6 @@ namespace CallOfTheWild
             static BlueprintFeature shield_master = library.Get<BlueprintFeature>("dbec636d84482944f87435bd31522fcc");
             static bool Prefix(ShieldMaster __instance, RuleCalculateAttackBonusWithoutTarget evt)
             {
-                Main.TraceLog();
                 if (!evt.Initiator.Body.SecondaryHand.HasShield || evt.Weapon == null || !evt.Weapon.IsShield)
                     return false;
                 //do nothing regarding penalties, everything is taken care of in twf logic

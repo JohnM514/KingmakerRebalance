@@ -94,7 +94,6 @@ namespace CallOfTheWild.ActivatableAbilityActionTypeModierMechanics
     {
         static bool Prefix(ActivatableAbility ability, ref UnitCommand.CommandType __result)
         {
-            Main.TraceLog();
             if (ability.Blueprint.Group != ActivatableAbilityGroup.BardicPerformance)
             {
                 __result = ability.Owner.Ensure< UnitPartActivatableAbilityActionTypeModifier>().getCommandType(ability.Blueprint);

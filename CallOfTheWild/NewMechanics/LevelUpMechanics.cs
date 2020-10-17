@@ -65,7 +65,6 @@ namespace CallOfTheWild.LevelUpMechanics
     {
         static bool Prefix(LevelUpController __instance, [CanBeNull] JToken unitJson)
         {
-            Main.TraceLog();
             EventBus.RaiseEvent<ILevelUpStartHandler>((Action<ILevelUpStartHandler>)(h => h.HandleLevelUpStart(__instance.Unit)));
             return true;
         }
