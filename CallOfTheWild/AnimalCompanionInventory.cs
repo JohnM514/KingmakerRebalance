@@ -22,6 +22,7 @@ namespace CallOfTheWild
         {
             static bool Prefix(Inventory __instance)
             {
+                Main.TraceLog();
                 UnitEntityData currentCharacter = GroupController.Instance.GetCurrentCharacter();
                 __instance.Placeholder.gameObject.SetActive(currentCharacter.Body.IsPolymorphed);
                 __instance.Sheet.SetCharacter(currentCharacter.Descriptor);
@@ -59,6 +60,7 @@ namespace CallOfTheWild
 
             static bool Prefix(CharDollBase __instance, UnitEntityData player)
             {
+                Main.TraceLog();
                 var tr = Harmony12.Traverse.Create(__instance);
                 tr.Property("CurrentUnit").SetValue(player);
                 if (__instance.CurrentUnit == null)
@@ -117,9 +119,12 @@ namespace CallOfTheWild
                         }
                     }                                      
                 }
-                if (tr.Property("Room").GetValue() != null)
-                    tr.Property("Room").Method("SetupInfo", player).GetValue();
-                if (tr.Property("DollWeaponSets").GetValue() == null)
+                var room = tr.Property("Room").GetValue<DollRoom>();
+                if (room != null)
+                    room.SetupInfo(player);
+
+                var doll_weapon_sets = Helpers.GetField<DollWeaponSets>(__instance, "m_DollWeaponSets");
+                if (doll_weapon_sets == null)
                 {
                     return false;
                 }
@@ -137,7 +142,7 @@ namespace CallOfTheWild
                     }
                 }
 
-                tr.Field("m_DollWeaponSets").Method("SetupInfo", player.Body).GetValue();
+                doll_weapon_sets.SetupInfo(player);
 
                 return false;
             }

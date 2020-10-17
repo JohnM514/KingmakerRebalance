@@ -68,6 +68,7 @@ namespace CallOfTheWild.SpellbookMechanics
     {
         static void Postfix(Spellbook __instance)
         {
+            Main.TraceLog();
             if (!__instance.Blueprint.Spontaneous)
             {
                 return;
@@ -139,6 +140,7 @@ namespace CallOfTheWild.SpellbookMechanics
     {
         static void Postfix(Spellbook __instance, int spellLevel, ref IEnumerable<SpellSlot> __result)
         {
+            Main.TraceLog();
             if (__instance.Blueprint.GetComponent<CanNotUseSpells>() != null)
             {
                 __result = new SpellSlot[0];
@@ -199,6 +201,7 @@ namespace CallOfTheWild.SpellbookMechanics
     {
         static bool Prefix(Spellbook __instance, AbilityData spell, bool excludeSpecial, ref bool __result)
         {
+            Main.TraceLog();
             if (__instance.Owner.Ensure<UnitPartDoNotSpendNextSpell>().active)
             {
                 __instance.Owner.Ensure<UnitPartDoNotSpendNextSpell>().active = false;
@@ -217,6 +220,7 @@ namespace CallOfTheWild.SpellbookMechanics
     {
         static void Postfix(Spellbook __instance)
         {
+            Main.TraceLog();
             foreach (var cs in __instance.Blueprint.GetComponents<CompanionSpellbook>())
             {
                 __instance.Owner.DemandSpellbook(cs.spellbook).AddCasterLevel();
@@ -252,6 +256,7 @@ namespace CallOfTheWild.SpellbookMechanics
     {
         static bool Prefix(Spellbook __instance, int spellLevel, ref int __result)
         {
+            Main.TraceLog();
             if (__instance.Blueprint.GetComponent<NoSpellsPerDaySacaling>() == null)
             {
                 return true;
@@ -285,6 +290,7 @@ namespace CallOfTheWild.SpellbookMechanics
     {
         static bool Prefix(SpellBookMetamagicMixer __instance, Kingmaker.UnitLogic.Feature feature, MetamagicBuilder ___m_MetamagicBuilder)
         {
+            Main.TraceLog();
             var unit = ___m_MetamagicBuilder?.Spellbook?.Owner;
             if (unit == null)
             {

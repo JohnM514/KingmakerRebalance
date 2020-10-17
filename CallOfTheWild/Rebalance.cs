@@ -883,10 +883,10 @@ namespace CallOfTheWild
 
         internal static void fixDispellingStrikeCL()
         {
-            var slayer = library.Get<BlueprintCharacterClass>("c75e0971973957d4dbad24bc7957e4fb");
+            //var slayer = library.Get<BlueprintCharacterClass>("c75e0971973957d4dbad24bc7957e4fb");
             var dispelling_attack = library.Get<BlueprintFeature>("1b92146b8a9830d4bb97ab694335fa7c");
-            dispelling_attack.ReplaceComponent<ContextRankConfig>(c => Helpers.SetField(c, "m_Class", Helpers.GetField<BlueprintCharacterClass[]>(c, "m_Class").AddToArray(slayer)));
-            dispelling_attack.ReplaceComponent<ReplaceCasterLevelOfFeature>(Helpers.Create<NewMechanics.ReplaceCasterLevelOfFactWithContextValue>(r =>
+           // dispelling_attack.ReplaceComponent<ContextRankConfig>(c => Helpers.SetField(c, "m_Class", Helpers.GetField<BlueprintCharacterClass[]>(c, "m_Class").AddToArray(slayer)));
+            dispelling_attack.ReplaceComponent<ContextSetAbilityParams>(Helpers.Create<NewMechanics.ReplaceCasterLevelOfFactWithContextValue>(r =>
                                                                                                                                                     {
                                                                                                                                                         r.Feature = dispelling_attack;
                                                                                                                                                         r.value = Helpers.CreateContextValue(AbilityRankType.Default);
@@ -1247,6 +1247,15 @@ namespace CallOfTheWild
             }
         }
 
+        internal static void refixBardicPerformanceOverlap()
+        {
+            //after 2.1.2 dev's fix
+            var abilities = library.GetAllBlueprints().OfType<BlueprintActivatableAbility>().Where(a => a.Group == ActivatableAbilityGroup.BardicPerformance);
+            foreach (var a in abilities)
+            {
+                a.Buff.RemoveComponents<AddFactContextActions>();
+            }
+        }
 
         //forbid bard song overlap on bardic performance
         [Harmony12.HarmonyPatch(typeof(ActivatableAbility))]
@@ -1255,6 +1264,7 @@ namespace CallOfTheWild
         {
             static void Postfix(ActivatableAbility __instance)
             {
+                Main.TraceLog();
                 if (__instance.Blueprint.Group != ActivatableAbilityGroup.BardicPerformance)
                 {
                     return;
@@ -1519,6 +1529,7 @@ namespace CallOfTheWild
         {
             static void Postfix(BlueprintAbility __instance, bool reach, ref Feet __result)
             {
+                Main.TraceLog();
                 AbilityRange range = __instance.Range;
                 if (!(range == AbilityRange.Touch || range == AbilityRange.Close || range == AbilityRange.Medium || range == AbilityRange.Long))
                 {
@@ -2108,6 +2119,7 @@ namespace CallOfTheWild
     {
         static void Postfix(UnitEntityData __instance, UnitEntityData unit, ref bool __result)
         {
+            Main.TraceLog();
             if (__result == true)
             {
                 return;
@@ -2122,7 +2134,6 @@ namespace CallOfTheWild
             {
                 __result = !__instance.IsEnemy(unit) && __instance.IsAlly(summoner);
             }
-
         }
     }
 
@@ -2138,6 +2149,7 @@ namespace CallOfTheWild
     {
         static void Postfix(ModifiableValue.Modifier __instance,  ref bool __result)
         {
+            Main.TraceLog();
             __result = __result || __instance.ModDescriptor == ModifierDescriptor.Inherent || __instance.ModDescriptor == ModifierDescriptor.Feat;
         }
     }

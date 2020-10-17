@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TurnBased.Controllers;
 
 namespace CallOfTheWild.HoldingItemsMechanics
 {
@@ -37,6 +38,7 @@ namespace CallOfTheWild.HoldingItemsMechanics
     {
         static void Postfix(ItemEntityWeapon __instance, ref bool __result)
         {
+            Main.TraceLog();
             bool spell_combat = false;
             UnitPartMagus unit_part_magus = __instance.Wielder?.Get<UnitPartMagus>();
             if ((bool)(unit_part_magus) && unit_part_magus.SpellCombat.Active)
@@ -85,6 +87,7 @@ namespace CallOfTheWild.HoldingItemsMechanics
     {
         static bool Prefix(HandSlot __instance)
         {
+            Main.TraceLog();
             var unit_part = __instance.Owner?.Get<UnitPartCanHold2hWeaponIn1h>();
 
             if (unit_part == null)
@@ -582,6 +585,7 @@ namespace CallOfTheWild.HoldingItemsMechanics
     {
         static bool Prefix(MonkNoArmorFeatureUnlock __instance)
         {
+            Main.TraceLog();
             if (!Helpers.hasShield2(__instance.Owner.Body.SecondaryHand) && (!__instance.Owner.Body.Armor.HasArmor || !__instance.Owner.Body.Armor.Armor.Blueprint.IsArmor))
             {
                 __instance.AddFact();
@@ -671,6 +675,7 @@ namespace CallOfTheWild.HoldingItemsMechanics
     {
         static bool Prefix(RestrictionCanGatherPower __instance, ref bool __result)
         {
+            Main.TraceLog();
             __result = getResult(__instance);
             return false;
         }
@@ -709,6 +714,7 @@ namespace CallOfTheWild.HoldingItemsMechanics
     {
         static void Postfix(ItemEntityWeapon __instance, bool forDollRoom, ref WeaponAnimationStyle __result)
         {
+            Main.TraceLog();
             if (__instance == null)
             {
                 return;
@@ -743,7 +749,7 @@ namespace CallOfTheWild.HoldingItemsMechanics
     //EmptyHandWeaponOverrideNotification
     [Harmony12.HarmonyPatch(typeof(UnitBody))]
     [Harmony12.HarmonyPatch("SetEmptyHandWeapon", Harmony12.MethodType.Normal)]
-    class UnitBody__SetEmptyHandWeapon__Patch
+    public class UnitBody__SetEmptyHandWeapon__Patch
     {
         public static bool no_animation_action = false;
         //signal weapon set change to notify that weapons could have been changed
@@ -762,11 +768,32 @@ namespace CallOfTheWild.HoldingItemsMechanics
     {
         static bool Prefix(UnitViewHandsEquipment __instance)
         {
+            Main.TraceLog();
             var tr = Harmony12.Traverse.Create(__instance);
 
             if (UnitBody__SetEmptyHandWeapon__Patch.no_animation_action)
             {
-                tr.Method("ChangeEquipmentWithoutAnimation").GetValue();
+                //Main.logger.Log("Skipping Weapon change animation");
+                //tr.Method("UpdateActiveWeaponSetImmediately").GetValue();
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+
+    //make signal from created weapons no longer consume move action
+    [Harmony12.HarmonyPatch(typeof(TurnController))]
+    [Harmony12.HarmonyPatch("HandleUnitChangeActiveEquipmentSet", Harmony12.MethodType.Normal)]
+    class TurnController_HandleEquipmentSetChanged_Patch
+    {
+        static bool Prefix(TurnController __instance, UnitDescriptor unit)
+        {
+            Main.TraceLog();
+            Main.logger.Log("Trigger");
+            if (UnitBody__SetEmptyHandWeapon__Patch.no_animation_action)
+            {
                 return false;
             }
 
@@ -781,6 +808,7 @@ namespace CallOfTheWild.HoldingItemsMechanics
         //signal weapon set change to notify that weapons could have been changed
         static void Postfix(UnitBody __instance, BlueprintItemWeapon weapon)
         {
+            Main.TraceLog();
             UnitBody__SetEmptyHandWeapon__Patch.no_animation_action = true;
             EventBus.RaiseEvent<IUnitActiveEquipmentSetHandler>((Action<IUnitActiveEquipmentSetHandler>)(h => h.HandleUnitChangeActiveEquipmentSet(__instance.Owner)));
             UnitBody__SetEmptyHandWeapon__Patch.no_animation_action = false;

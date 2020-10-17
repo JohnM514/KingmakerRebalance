@@ -112,6 +112,7 @@ namespace CallOfTheWild
                                                     )
                                                   );
 
+            var infernal_bloodline = library.Get<BlueprintProgression>("e76a774cacfb092498177e6ca706064d");
             foreach (var b in bloodlines)
             {
                 List<StatType> bloodline_skills = new List<StatType>();
@@ -192,6 +193,11 @@ namespace CallOfTheWild
 
                 eldritch_heritage.AddComponent(Helpers.PrerequisiteNoFeature(b));
                 b.AddComponent(Helpers.PrerequisiteNoFeature(eldritch_heritage));
+
+                if (b == infernal_bloodline)
+                {
+                    eldritch_heritage.AddComponent(Common.prerequisiteNoArchetype(Summoner.devil_binder));
+                }
             }
 
             sorcerer.AddComponent(Helpers.PrerequisiteNoFeature(eldritch_heritage));

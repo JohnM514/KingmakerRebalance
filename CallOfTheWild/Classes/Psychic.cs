@@ -1307,7 +1307,6 @@ namespace CallOfTheWild
 
         static void createPsychicProgression()
         {
-            var deity = Main.library.Get<BlueprintFeatureSelection>("59e7a76987fe3b547b9cce045f4db3e4");
             createPsychicProficiencies();
             createPhrenicAmplification();
             createPsychicDisiciplines();
@@ -1321,7 +1320,8 @@ namespace CallOfTheWild
                                                             FeatureGroup.None);
             psychic_progression.Classes = getPsychicArray();
 
-            psychic_progression.LevelEntries = new LevelEntry[] {Helpers.LevelEntry(1, psychic_proficiencies, detect_magic, deity, //deity for faith discipline
+            var deity = library.Get<BlueprintFeatureSelection>("59e7a76987fe3b547b9cce045f4db3e4");
+            psychic_progression.LevelEntries = new LevelEntry[] {Helpers.LevelEntry(1, psychic_proficiencies, detect_magic,
                                                                                         psychic_discipline,
                                                                                         phrenic_amplification,
                                                                                         psychic_spellcasting,

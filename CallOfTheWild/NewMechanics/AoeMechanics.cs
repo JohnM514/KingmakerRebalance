@@ -58,7 +58,8 @@ namespace CallOfTheWild.AoeMechanics
     class AbilityData__WouldCurrentlyTarget__Patch
     {
         static void Postfix(AbilityData __instance, Vector3 targetPos, UnitEntityData unit, ref bool __result)
-        {         
+        {
+            Main.TraceLog();
             if (!__result)
             {
                 return;
@@ -78,6 +79,7 @@ namespace CallOfTheWild.AoeMechanics
     {
         static void Postfix(AbilityAoERange __instance, ref bool __result, Ability ___Ability)
         {
+            Main.TraceLog();
             //Disable AbilityAoERange for wall spells
             if (___Ability != null && ___Ability.Blueprint.GetComponent<AbilityRectangularAoeVisualizer>() != null)
             {
@@ -101,7 +103,9 @@ namespace CallOfTheWild.AoeMechanics
         {
             if (!Initalized)
             {
-                var abilityTargetSelect = Game.Instance.UI.Common?.transform.Find("AbilityTargetSelect")?.gameObject;
+                var abilityTargetSelect = Game.Instance.IsControllerMouse ?
+                    Game.Instance.UI.Common?.transform.Find("CombatCursorPC")?.gameObject :
+                    Game.Instance.UI.Common?.transform.Find("Console_TargetSelect")?.gameObject;
                 var abilityLineRange = abilityTargetSelect?.GetComponent<AbilityLineRange>()?.Range;
                 if (abilityLineRange == null) throw new System.Exception("Could not find AbilityLineRange");
                 var lineRangeVisual = abilityLineRange.transform.Find("Pivot/Line")?.gameObject;
