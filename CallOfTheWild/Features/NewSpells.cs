@@ -1709,6 +1709,7 @@ namespace CallOfTheWild
                                          Helpers.CreateAddStatBonus(StatType.SaveReflex, -4, ModifierDescriptor.UntypedStackable),
                                          Helpers.Create<BuffAllSkillsBonus>(b => { b.Value = -4; b.Descriptor = ModifierDescriptor.UntypedStackable; }),
                                          Common.createAddCondition(Kingmaker.UnitLogic.UnitCondition.SpellCastingIsDifficult),
+                                         Common.createAddCondition(Kingmaker.UnitLogic.UnitCondition.Slowed),
                                          Helpers.Create<ConcealementMechanics.AddOutgoingConcealment>(a =>
                                          {
                                              a.Concealment = Concealment.Partial;
